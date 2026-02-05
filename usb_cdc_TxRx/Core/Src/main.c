@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,15 +93,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  char msg[] = "Hello World\n";
-  while (1)
-  {
-	  CDC_Transmit_FS((uint8_t *)msg, 12);
-	  HAL_Delay(500);
+	char msg[] = "Hello World\n";
+	while (1){
+		while(USBD_BUSY == CDC_Transmit_FS((uint8_t *)msg, 12)){};
+		HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
