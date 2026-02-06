@@ -55,7 +55,8 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t buff[APP_RX_DATA_SIZE];
+uint32_t len = 0;
 /* USER CODE END 0 */
 
 /**
@@ -93,10 +94,22 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	char msg[] = "Hello World\n";
+//	char msg[] = "Hello World\n";
+
 	while (1){
-		while(USBD_BUSY == CDC_Transmit_FS((uint8_t *)msg, 12)){};
-		HAL_Delay(500);
+		/* Part 2 */
+		if(len){
+			while(USBD_BUSY == CDC_Transmit_FS("\nReceived Data :", 16)){};
+			while(USBD_BUSY == CDC_Transmit_FS(buff, len)){};
+			len = 0;
+		}
+		
+		
+		/* Part 1 */
+//		while(USBD_BUSY == CDC_Transmit_FS((uint8_t *)msg, 12)){};
+//		HAL_Delay(500);
+			
+		extern uint8_t buff[];
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
