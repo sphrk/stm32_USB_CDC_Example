@@ -23,7 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
-
+#include "usb_serial.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,8 +55,8 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t buff[APP_RX_DATA_SIZE];
-uint32_t len = 0;
+//uint8_t buff[APP_RX_DATA_SIZE];
+//uint32_t len = 0;
 /* USER CODE END 0 */
 
 /**
@@ -95,14 +95,56 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 //	char msg[] = "Hello World\n";
-
+	
+	uint8_t cmd = 0;
+	char msg[30];
+	int msg_len;
 	while (1){
-		/* Part 2 */
-		if(len){
-			while(USBD_BUSY == CDC_Transmit_FS("\nReceived Data :", 16)){};
-			while(USBD_BUSY == CDC_Transmit_FS(buff, len)){};
-			len = 0;
+		if(USB_Read(&cmd, 1)){
+			switch(cmd)
+            {
+            	case 0x55:{
+					USB_Write("Hello World\n", 12);
+            		break;
+				}
+            	case 0x01:{
+					uint8_t a, b, result;
+					USB_Read(&a, 1); // Read First Value
+					USB_Read(&b, 1); // Read Second Value
+					result = a + b;
+					USB_Write(&result, 1); // Send Result
+            		break;
+				}
+				case 0xAA:{
+					uint8_t a;
+					USB_Read(&a, 1); // Read First Value
+					a += 1;
+					USB_Write(&a, 1); // Send Result
+            		break;
+				}
+            	default:{
+					msg_len = sprintf(msg, "Received Value: %x\n", cmd);
+					USB_Write(msg, msg_len);
+            		break;
+				}
+            }
 		}
+//		if(USB_Read(&cmd, 1)){
+//			if(cmd == 0x55){
+//				USB_Write("Hello World\n", 12);
+//			}else{
+//				msg_len = sprintf(msg, "Received Value: %x\n", cmd);
+//				USB_Write(msg, msg_len);
+//			}
+//		}
+		
+		
+		/* Part 2 */
+//		if(len){
+//			while(USBD_BUSY == CDC_Transmit_FS("\nReceived Data :", 16)){};
+//			while(USBD_BUSY == CDC_Transmit_FS(buff, len)){};
+//			len = 0;
+//		}
 		
 		
 		/* Part 1 */
