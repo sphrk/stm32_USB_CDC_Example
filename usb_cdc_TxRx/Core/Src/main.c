@@ -94,12 +94,13 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//	char msg[] = "Hello World\n";
+	// char msg[] = "Hello World\n";
 	
 	uint8_t cmd = 0;
 	char msg[30];
 	int msg_len;
 	while (1){
+		/* #### Part 3.B #### */
 		if(USB_Read(&cmd, 1)){
 			switch(cmd)
             {
@@ -129,6 +130,8 @@ int main(void)
 				}
             }
 		}
+		
+		/* #### Part 3.A #### */
 //		if(USB_Read(&cmd, 1)){
 //			if(cmd == 0x55){
 //				USB_Write("Hello World\n", 12);
@@ -139,7 +142,7 @@ int main(void)
 //		}
 		
 		
-		/* Part 2 */
+		/* #### Part 2 #### */
 //		if(len){
 //			while(USBD_BUSY == CDC_Transmit_FS("\nReceived Data :", 16)){};
 //			while(USBD_BUSY == CDC_Transmit_FS(buff, len)){};
@@ -147,7 +150,7 @@ int main(void)
 //		}
 		
 		
-		/* Part 1 */
+		/* #### Part 1 #### */
 //		while(USBD_BUSY == CDC_Transmit_FS((uint8_t *)msg, 12)){};
 //		HAL_Delay(500);
 			
