@@ -95,41 +95,64 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	// char msg[] = "Hello World\n";
-	
-	uint8_t cmd = 0;
 	char msg[30];
 	int msg_len;
+	
+	uint8_t cmd = 0;
 	while (1){
-		/* #### Part 3.B #### */
+		/* #### Part 5 #### */
 		if(USB_Read(&cmd, 1)){
 			switch(cmd)
             {
-            	case 0x55:{
-					USB_Write("Hello World\n", 12);
-            		break;
-				}
-            	case 0x01:{
-					uint8_t a, b, result;
-					USB_Read(&a, 1); // Read First Value
-					USB_Read(&b, 1); // Read Second Value
-					result = a + b;
-					USB_Write(&result, 1); // Send Result
-            		break;
-				}
-				case 0xAA:{
-					uint8_t a;
-					USB_Read(&a, 1); // Read First Value
+				case 0xBB:{
+					uint32_t a;
+					// (uint8_t *)&a : casting "a" address to a 8 bit pointer
+					USB_Read((uint8_t *)&a, 4); // Read 4 Bytes
 					a += 1;
-					USB_Write(&a, 1); // Send Result
+					USB_Write((uint8_t *)&a, 4); // Send Result
             		break;
 				}
-            	default:{
-					msg_len = sprintf(msg, "Received Value: %x\n", cmd);
-					USB_Write(msg, msg_len);
+				case 0x07:{
+					uint32_t c[3] = {0x1A2B3C4D, 0x12345678, 0x11223344};
+					
+					USB_Write((uint8_t *)c, 12); // Send 3*4 = 12 Bytes
             		break;
 				}
+            	
             }
 		}
+		
+		
+		/* #### Part 3.B #### */
+//		if(USB_Read(&cmd, 1)){
+//			switch(cmd)
+//            {
+//            	case 0x55:{
+//					USB_Write("Hello World\n", 12);
+//            		break;
+//				}
+//            	case 0x01:{
+//					uint8_t a, b, result;
+//					USB_Read(&a, 1); // Read First Value
+//					USB_Read(&b, 1); // Read Second Value
+//					result = a + b;
+//					USB_Write(&result, 1); // Send Result
+//            		break;
+//				}
+//				case 0xAA:{
+//					uint8_t a;
+//					USB_Read(&a, 1); // Read First Value
+//					a += 1;
+//					USB_Write(&a, 1); // Send Result
+//            		break;
+//				}
+//            	default:{
+//					msg_len = sprintf(msg, "Received Value: %x\n", cmd);
+//					USB_Write(msg, msg_len);
+//            		break;
+//				}
+//            }
+//		}
 		
 		/* #### Part 3.A #### */
 //		if(USB_Read(&cmd, 1)){
